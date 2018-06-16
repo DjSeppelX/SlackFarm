@@ -1,11 +1,26 @@
 #draft script for traveling salesman problem, wow edition
 #coordinates used have been fetched from classicdb.ch
 
-#Copyright Djseppelx of Nostalrius
+#Copyright Djseppelx and 'Niggma of Nostalrius
 
-#imports
+#imports for calculation
 import math
-from turtle import Turtle, Screen #graphics
+
+#imports for graphics
+from tkinter import *
+from tkinter.ttk import *
+from turtle import Turtle, Screen
+
+# TODO: Fix a helper function for importing the graphics,
+# the blob in the init() function is ugly.
+
+# TODO: Align the used background image with the canvas better
+
+# TODO: Menu with a few buttons (toggle the removal of nodes on/off).
+
+# TODO: Implement functionality for on-click events.
+# Used for "skipping" nodes in the pathing algorithm.
+
 def init():
     #read inputs and try to open file
     while True:
@@ -20,10 +35,16 @@ def init():
             file = open(map_arg + node_arg + ".txt", "r")
             screen = Screen()
             screen.onclick(lambda x, y: screen.update())
-            screen.setworldcoordinates(0, 0, 100, 100)
             screen.bgpic(map_arg + node_arg + ".png")
+            canvas = screen.getcanvas()
+            canvas.itemconfig(screen._bgpic, anchor="nw")
+            screen.setup(1000, 670)
+            screen.setworldcoordinates(0, 100, 100, 0)
+            #filename = PhotoImage(file = map_arg + node_arg + ".png")
+            #image = canvas.create_image(50, 50, anchor=NW, image=filename)
             turtle.color("red")
-            turtle.pensize(10)
+            turtle.pensize(5)
+            turtle.penup()
             break
 
         except FileNotFoundError:
@@ -77,9 +98,11 @@ def draw_graph(path):
     #move the turtle
     turtle.setx(path[0][0])
     turtle.sety(path[0][1])
-    for i in range(1, len(path)):
-        #print("I am supposed to move turtle to: " + path[i])
-        turtle.goto(path[i][0], path[i][1])
+    turtle.pendown()
+    #print(turtle.position())
+    for i in range(0, len(path)):
+        #print("Moving to x: " + str(path[i][0]) + ", y: " + str(path[i][1]))
+        turtle.goto(path[i][0], (path[i][1]))
     return
 
 turtle = Turtle()
