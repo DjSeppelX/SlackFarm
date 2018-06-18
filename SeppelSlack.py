@@ -11,9 +11,6 @@ from tkinter import *
 from tkinter.ttk import *
 from turtle import Turtle, Screen
 
-# TODO: Fix a helper function for importing the graphics,
-# the blob in the init() function is ugly.
-
 # TODO: Align the used background image with the canvas better
 
 # TODO: Menu with a few buttons (toggle the removal of nodes on/off).
@@ -33,18 +30,7 @@ def init():
 
             #fetch the data and setup graphical stuff
             file = open(map_arg + node_arg + ".txt", "r")
-            screen = Screen()
-            screen.onclick(lambda x, y: screen.update())
-            screen.bgpic(map_arg + node_arg + ".png")
-            canvas = screen.getcanvas()
-            canvas.itemconfig(screen._bgpic, anchor="nw")
-            screen.setup(1000, 670)
-            screen.setworldcoordinates(0, 100, 100, 0)
-            #filename = PhotoImage(file = map_arg + node_arg + ".png")
-            #image = canvas.create_image(50, 50, anchor=NW, image=filename)
-            turtle.color("red")
-            turtle.pensize(5)
-            turtle.penup()
+            screenloader_helper(map_arg, node_arg);
             break
 
         except FileNotFoundError:
@@ -63,6 +49,21 @@ def init():
 
     file.close()
     return all_coords
+
+def screenloader_helper(map_arg, node_arg):
+    screen = Screen()
+    screen.onclick(lambda x, y: screen.update())
+    screen.bgpic(map_arg + node_arg + ".png")
+    canvas = screen.getcanvas()
+    canvas.itemconfig(screen._bgpic, anchor="nw")
+    screen.setup(1000, 670)
+    screen.setworldcoordinates(0, 100, 100, 0)
+    #filename = PhotoImage(file = map_arg + node_arg + ".png")
+    #image = canvas.create_image(50, 50, anchor=NW, image=filename)
+    turtle.color("red")
+    turtle.pensize(5)
+    turtle.penup()
+    return
 
 #all_coords now contains all coordinates from the file. Sorted on y-axis.
 
