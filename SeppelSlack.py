@@ -15,8 +15,14 @@ from turtle import Turtle, Screen
 
 # TODO: Menu with a few buttons (toggle the removal of nodes on/off).
 
-# TODO: Implement functionality for on-click events.
-# Used for "skipping" nodes in the pathing algorithm.
+# TODO: Add functionality for un-toggling of nodes... how do we do this?
+# Would need to save a graphics window temporarily or smth.
+# This could be tricky.
+
+# TODO: Figure out why all_coords are zero after the nearest_neighbour call,
+# even with the temp variables.
+
+# TODO: Proper wait-state functionality, not a constant looping (tkinter mainloop)
 
 def init():
     #read inputs and try to open file
@@ -62,10 +68,9 @@ def screenloader_helper(map_arg, node_arg):
     turtle.penup()
     return
 
-#all_coords now contains all coordinates from the file. Sorted on y-axis.
-
 #attempt #1, nearest neighbour
 def nearest_neighbour(all_coords):
+    temp = all_coords #store all_coords if we need it later.
     visited_coords = []
     start = all_coords.pop(0)
     visited_coords.append(start)
@@ -83,6 +88,8 @@ def nearest_neighbour(all_coords):
         visited_coords.append(current_coord)
 
     visited_coords.append(start) #reconnect to the start
+    all_coords = temp #give back the coords, used in other functions
+    #above line currently not working?
     return visited_coords
 
 def get_distance_between(coord1, coord2):
@@ -101,13 +108,17 @@ def draw_graph(path):
     return
 
 def toggle_node(xCoord, yCoord):
+    toggled_coord = (xCoord, yCoord)
     print("xCoord :" + str(xCoord) + " yCoord: " + str(yCoord))
-    radius = 6 #parameter for node toggling
-    for i in range(len(all_coords)):
-        if distance(((xCoord, yCoord), all_coords[i]) < 3):
-            turtle.goto(xCoord, yCoord + radius/2)
+    radius = 1 #parameter for node toggling
+    for i in range(len(path)):
+        distance = get_distance_between(toggled_coord, path[i])
+        if distance < 1: #very close
+            turtle.penup() #don't paint when we move
+            turtle.goto(xCoord, yCoord - radius/2)
+            turtle.pendown() #paint the circle
             turtle.circle(radius, 360) #small circle
-            disabled_coords.append(all_coords.pop(i))
+            disabled_coords.append(path[i])
     return
         
 turtle = Turtle()
